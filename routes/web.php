@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentOcrController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,8 @@ Route::get('/', function () {
 Route::get('/pdf-to-word', function () {
     return Inertia::render('Pdf2Doc');
 })->name('Pdf2Doc');
+
+Route::post('/convert-pdf-to-doc', [DocumentOcrController::class, 'convertPdfToDoc']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
