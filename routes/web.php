@@ -21,6 +21,7 @@ Route::get('/pdf-to-word', function () {
 })->name('Pdf2Doc');
 
 Route::post('/convert-pdf-to-doc', [DocumentOcrController::class, 'convertPdfToDoc']);
+Route::post('/convert-pdf-to-searchable', [DocumentOcrController::class, 'convertPdfToSearchable']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -32,4 +33,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -6,21 +6,26 @@ const form = useForm({
   file: null,
 });
 
-const downloadLink = ref(null);
+const selectedFileName = ref('');
+const downloadUrl = ref('');
 
-async function convertPdfToDoc() {
+function handleFileInput(event) {
+  const file = event.target.files[0];
+  if (file) {
+    form.file = file;
+    selectedFileName.value = file.name;
+  }
+}
+
+async function convertPdfToSearchable() {
   try {
-    const response = await form.post('/convert-pdf-to-doc', {
+    await form.post('/convert-pdf-to-searchable', {
       forceFormData: true,
       onSuccess: (response) => {
-        // Handle the file download
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        downloadLink.value = url;
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'converted.docx');
-        document.body.appendChild(link);
-        link.click();
+        downloadUrl.value = response.props.downloadUrl;
+      },
+      onError: (errors) => {
+        console.error('Conversion failed:', errors);
       },
     });
   } catch (error) {
@@ -30,7 +35,7 @@ async function convertPdfToDoc() {
 </script>
 
 <template>
-  <Head title="PDF to DOC Converter - Document Buddy" />
+  <Head title="Convert Non-Searchable PDF to Searchable PDF - Document Buddy" />
   <div class="bg-gray-100 min-h-screen flex flex-col">
     <header class="bg-blue-600 text-white py-4">
       <div class="container mx-auto flex justify-between items-center">
@@ -43,24 +48,45 @@ async function convertPdfToDoc() {
     </header>
 
     <main class="flex-grow container mx-auto py-10 text-center">
-      <h2 class="text-3xl font-bold mb-4">Convert PDF to DOC</h2>
+      <h2 class="text-3xl font-bold mb-4">Convert Non-Searchable PDF to Searchable PDF</h2>
       <p class="text-lg text-gray-600 mb-8">
-        Easily convert your PDF documents to DOC format with our free tool. Our PDF to Document Converter is fast, reliable, and completely free.
+        Transform your non-searchable PDFs into searchable, ATS-friendly documents with our free tool. Enhance your document's accessibility and usability.
       </p>
-      <form @submit.prevent="convertPdfToDoc">
-        <input class="mb-4 p-2 border border-gray-300" type="file" @input="form.file = $event.target.files[0]" />
-        <progress v-if="form.progress" :value="form.progress.percentage" max="100">
-          {{ form.progress.percentage }}%
-        </progress>
-        <button class="px-5 border border-gray-600" type="submit">Convert to .DOC</button>
-      </form>
+      <div class="flex justify-between items-center">
+        <form @submit.prevent="convertPdfToSearchable" class="bg-white shadow-md rounded-lg p-8 mb-4 w-1/2">
+          <h2 class="text-2xl font-bold mb-6 text-center">Upload Your PDF</h2>
+          <div class="mb-6">
+            <label class="block text-lg font-medium text-gray-700 mb-2" for="pdf-upload">Choose a PDF File</label>
+            <input 
+              id="pdf-upload"
+              class="p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition duration-200 hover:border-blue-400" 
+              type="file" 
+              @input="handleFileInput" 
+              accept="application/pdf" 
+            />
+            <p v-if="selectedFileName" class="mt-2 text-sm text-gray-600">Selected file: {{ selectedFileName }}</p>
+          </div>
+          <button 
+            class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition duration-200" 
+            type="submit"
+          >
+            Convert to Searchable PDF
+          </button>
+        </form>
+        <div class="w-1/2 flex items-center justify-center">
+          <img src="https://via.placeholder.com/150?text=Free+Service" alt="Free Service" class="max-w-full h-auto" />
+        </div>
+      </div>
+
+      <div v-if="downloadUrl" class="mt-10">
+        <a :href="downloadUrl" class="text-blue-600 hover:underline" download>Download Converted PDF</a>
+      </div>
 
       <section class="mt-10">
         <h3 class="text-2xl font-bold mb-4">Features</h3>
         <ul class="list-disc list-inside text-left mx-auto max-w-lg">
-          <li>Fast and reliable PDF to DOC conversion</li>
-          <li>Supports OCR for scanned PDFs</li>
-          <li>Maintains document formatting</li>
+          <li>Convert non-searchable PDFs to searchable PDFs</li>
+          <li>Enhance document accessibility</li>
           <li>Completely free to use</li>
         </ul>
       </section>
@@ -68,7 +94,7 @@ async function convertPdfToDoc() {
       <section class="mt-10">
         <h3 class="text-2xl font-bold mb-4">How It Works</h3>
         <p class="text-left mx-auto max-w-lg">
-          Upload your PDF file using the form above. Our tool will process the file and convert it to a DOC format, which you can then download. The process is simple and quick, ensuring you get your converted document in no time.
+          Upload your non-searchable PDF file using the form above. Our tool will process the file and convert it to a searchable PDF format, which you can then download. The process is simple and quick, ensuring you get your converted document in no time.
         </p>
       </section>
 
@@ -76,9 +102,9 @@ async function convertPdfToDoc() {
         <h3 class="text-2xl font-bold mb-4">FAQs</h3>
         <div class="text-left mx-auto max-w-lg">
           <h4 class="font-semibold">Is the conversion free?</h4>
-          <p>Yes, our PDF to DOC converter is completely free to use.</p>
-          <h4 class="font-semibold mt-4">Can I convert scanned PDFs?</h4>
-          <p>Yes, our tool supports OCR, allowing you to convert scanned PDFs to editable DOC files.</p>
+          <p>Yes, our PDF to searchable PDF converter is completely free to use.</p>
+          <h4 class="font-semibold mt-4">What is a searchable PDF?</h4>
+          <p>A searchable PDF is a PDF document that has been processed with OCR to allow text search and selection.</p>
         </div>
       </section>
     </main>

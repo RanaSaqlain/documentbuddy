@@ -6,20 +6,25 @@ use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentOcrController extends Controller
 {
-    public function convertPdfToDoc(Request $request)
+    public function convertPdfToSearchable(Request $request)
     {
         // Validate the uploaded file
         $request->validate([
             'file' => 'required|mimes:pdf|max:5120', // Max 5MB file size
         ]);
-
+    
+        // Get original filename
+        $originalFilename = $request->file('file')->getClientOriginalName();
+        $filenameWithoutExt = pathinfo($originalFilename, PATHINFO_FILENAME);
+        
         // Define directories for input and output
-        $inputDir = storage_path('app/public/temp');
-        $outputDir = storage_path('app/public/output');
-
+        $inputDir = storage_path('app/public/temp/');
+        $outputDir = storage_path('app/public/output/');
+    
         // Ensure directories exist
         if (!file_exists($inputDir)) {
             mkdir($inputDir, 0755, true);
@@ -27,22 +32,21 @@ class DocumentOcrController extends Controller
         if (!file_exists($outputDir)) {
             mkdir($outputDir, 0755, true);
         }
-
+    
         // Store the uploaded file temporarily
         $pdfPath = $inputDir . '/' . uniqid() . '.pdf';
         $request->file('file')->move($inputDir, basename($pdfPath));
-
-        // Paths for output files
-        $ocrPdfPath = $outputDir . uniqid() . '.pdf';
-        $docxPath = $outputDir . uniqid() . '.docx';
-
+    
+        // Path for the output file - use unique ID for processing but keep original name for download
+        $searchablePdfPath = $outputDir . '/' . uniqid() . '.pdf';
+    
         // Set environment variables with more complete paths
         $env = [
             'PATH' => '/usr/local/bin:/usr/bin:/bin:/opt/local/bin:/opt/homebrew/bin',
             'TMPDIR' => $outputDir // Explicitly set temp directory
         ];
-
-        // Run OCRmyPDF with additional options
+    
+        // Run OCRmyPDF to convert to searchable PDF
         $ocrProcess = new Process([
             'ocrmypdf',
             '--force-ocr',
@@ -53,50 +57,70 @@ class DocumentOcrController extends Controller
             '--jobs',
             '2', // Limit parallel processing
             $pdfPath,
-            $ocrPdfPath
+            $searchablePdfPath
         ]);
-
+    
         $ocrProcess->setEnv($env);
         $ocrProcess->setTimeout(300); // 5 minute timeout
         $ocrProcess->run();
-
+    
+        // Clean up input file
+        unlink($pdfPath);
+    
         if (!$ocrProcess->isSuccessful()) {
-            unlink($pdfPath);
-            return Inertia::render('Pdf2Doc', [
+            return response()->json([
+                'success' => false,
                 'error' => 'OCR process failed',
                 'details' => $ocrProcess->getErrorOutput(),
-            ]);
+            ], 500);
+        }
+    
+        // Ensure the file exists before attempting to download
+        if (!file_exists($searchablePdfPath)) {
+            return response()->json([
+                'success' => false,
+                'error' => 'File not found after conversion',
+            ], 500);
         }
 
-        // Clean up input file after successful OCR
-        unlink($pdfPath);
+        // Generate a URL for the downloadable file
+        $downloadUrl = Storage::url('output/' . basename($searchablePdfPath));
+    
+        // Return the URL for the downloadable file
+        return Inertia::render('Pdf2Doc', [
+            'downloadUrl' => $downloadUrl,
+        ]);
+    }
 
-        // Step 2: Convert OCR-processed PDF to DOCX
+    private function convertPdfToDocx($pdfPath, $outputDir)
+    {
+        // Path for the DOCX output file
+        $docxPath = $outputDir . uniqid() . '.docx';
+
+        // Set environment variables
+        $env = [
+            'PATH' => '/usr/local/bin:/usr/bin:/bin:/opt/local/bin:/opt/homebrew/bin',
+            'TMPDIR' => $outputDir
+        ];
+
+        // Convert PDF to DOCX using LibreOffice
         $convertProcess = new Process([
             'libreoffice',
             '--headless',
             '--convert-to',
             'docx',
-            $ocrPdfPath,
+            $pdfPath,
             '--outdir',
             $outputDir
         ]);
+
         $convertProcess->setEnv($env);
         $convertProcess->run();
 
         if (!$convertProcess->isSuccessful()) {
-            // Clean up OCR output file
-            unlink($ocrPdfPath);
-            return Inertia::render('Pdf2Doc', [
-                'error' => 'PDF to DOCX conversion failed',
-                'details' => $convertProcess->getErrorOutput(),
-            ]);
+            throw new ProcessFailedException($convertProcess);
         }
 
-        // Clean up OCR output file after successful conversion
-        unlink($ocrPdfPath);
-
-        // Step 3: Return the converted DOCX file
-        return response()->download($docxPath)->deleteFileAfterSend(true);
+        return $docxPath;
     }
 }
