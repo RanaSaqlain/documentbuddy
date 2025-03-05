@@ -1,22 +1,35 @@
 <script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
+import TopNav from '@/Components/TopNav.vue';
+import Footer from '@/Components/Footer.vue';
+import { Head } from '@inertiajs/vue3';
+
 </script>
 
 <template>
-    <div
-        class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0"
-    >
-        <div>
-            <Link href="/">
-                <ApplicationLogo class="h-20 w-20 fill-current text-gray-500" />
-            </Link>
-        </div>
 
-        <div
-            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
-        >
-            <slot />
-        </div>
-    </div>
+    <Head>
+        <meta name="description"
+            content="Document Buddy is your go-to tool for converting PDF files to DOCX format. Fast, secure, and easy to use. Try it now for free!">
+        <meta name="keywords"
+            content="PDF to DOCX, PDF converter, document conversion, online PDF tool, free PDF converter">
+        <meta name="author" content="Document Buddy">
+        <meta name="robots" content="index, follow">
+        <meta property="og:title" content="Document Buddy - Convert PDF to DOCX with Ease">
+        <meta property="og:description"
+            content="Document Buddy is your go-to tool for converting PDF files to DOCX format. Fast, secure, and easy to use. Try it now for free!">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://www.documentbuddy.com">
+        <meta property="og:image" content="https://www.documentbuddy.com/images/og-image.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Document Buddy - Convert PDF to DOCX with Ease">
+        <meta name="twitter:description"
+            content="Document Buddy is your go-to tool for converting PDF files to DOCX format. Fast, secure, and easy to use. Try it now for free!">
+        <meta name="twitter:image" content="https://www.documentbuddy.com/images/og-image.jpg">
+
+    </Head>
+    <TopNav></TopNav>
+    <section>
+        <slot />
+    </section>
+    <Footer></Footer>
 </template>

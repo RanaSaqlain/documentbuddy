@@ -1,11 +1,11 @@
 <script setup>
-
+import GuestLayout from '@/Layouts/GuestLayout.vue';
+import Hero from './Home/Hero.vue'
+import Features from './Home/Features.vue'
 </script>
 <template>
-    Head
-    Menu 
-    Hero Section 
-    upload File
-    SEO Content
-    others
+    <GuestLayout>
+        <Hero></Hero>
+        <Features></Features>
+    </GuestLayout>
 </template>
