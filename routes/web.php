@@ -15,6 +15,7 @@ Route::get('/', function () {
     // ]);
     return Inertia::render('Home');
 });
+Route::inertia('about','About');
 
 Route::get('/pdf-to-word', function () {
     return Inertia::render('Pdf2Doc');
