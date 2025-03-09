@@ -19,6 +19,8 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
-        "alpinejs": "^3.14.8"
+        "alpinejs": "^3.14.8",
+        "pdfjs-dist": "^2.16.105",
+        "vue-pdf-embed": "^2.1.2"
     }
 }

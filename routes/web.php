@@ -16,13 +16,14 @@ Route::get('/', function () {
     return Inertia::render('Home');
 });
 Route::inertia('about','About');
+Route::inertia('services','Services/Index')->name('services');
 
-Route::get('/pdf-to-word', function () {
-    return Inertia::render('Pdf2Doc');
-})->name('Pdf2Doc');
+Route::get('/pdf-to-scanable-pdf', function () {
+    return Inertia::render('Services/Pdf2Pdf');
+})->name('Pdf2Pdf');
 
 Route::post('/convert-pdf-to-doc', [DocumentOcrController::class, 'convertPdfToDoc']);
-Route::post('/convert-pdf-to-searchable', [DocumentOcrController::class, 'convertPdfToSearchable']);
+Route::post('/convert-pdf-to-searchable', [DocumentOcrController::class, 'convertPdfToSearchable'])->name('pdfscanable');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

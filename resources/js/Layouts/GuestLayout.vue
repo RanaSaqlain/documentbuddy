@@ -9,9 +9,7 @@ import { Head } from '@inertiajs/vue3';
 
     <Head>
         <meta name="description"
-            content="Document Buddy is your go-to tool for converting PDF files to DOCX format. Fast, secure, and easy to use. Try it now for free!">
-        <meta name="keywords"
-            content="PDF to DOCX, PDF converter, document conversion, online PDF tool, free PDF converter">
+        content="Document Buddy is your go-to tool for converting PDF files to DOCX format. Fast, secure, and easy to use. Try it now for free!">
         <meta name="author" content="Document Buddy">
         <meta name="robots" content="index, follow">
         <meta property="og:title" content="Document Buddy - Convert PDF to DOCX with Ease">
@@ -22,8 +20,7 @@ import { Head } from '@inertiajs/vue3';
         <meta property="og:image" content="https://www.documentbuddy.com/images/og-image.jpg">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="Document Buddy - Convert PDF to DOCX with Ease">
-        <meta name="twitter:description"
-            content="Document Buddy is your go-to tool for converting PDF files to DOCX format. Fast, secure, and easy to use. Try it now for free!">
+        <meta name="twitter:description" content="Document Buddy is your go-to tool for converting PDF files to DOCX format. Fast, secure, and easy to use. Try it now for free!">
         <meta name="twitter:image" content="https://www.documentbuddy.com/images/og-image.jpg">
 
     </Head>
