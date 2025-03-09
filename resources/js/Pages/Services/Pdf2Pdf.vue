@@ -92,8 +92,10 @@ const handlePdfError = (error) => {
               download>Download Your Searchable PDF</a>
           </div>
         </div>
-        <div v-if="src && !downloadUrl" class="w-1/4">
+        <div class="flex justify-center">
+        <div v-if="src && !downloadUrl" class="w-1/2">
           <PdfViewer :src="src" :lazyLoading="true" @loaded="handlePdfLoaded" @error="handlePdfError" />
+        </div>
         </div>
 
         <section class="mt-10">
