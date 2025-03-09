@@ -1,13 +1,18 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { ref } from 'vue';
-import { useForm, Head, Link } from '@inertiajs/vue3';
+import { useForm, Head, Link, router } from '@inertiajs/vue3';
 
 const form = useForm({
   file: null,
 });
-const src = ref('');
 
+const removeFile = useForm({
+  url: null,
+})
+
+const src = ref('');
+const converted = ref();
 
 const selectedFileName = ref('');
 const downloadUrl = ref('');
@@ -18,6 +23,7 @@ function handleFileInput(event) {
     form.file = file;
     selectedFileName.value = file.name;
     src.value = URL.createObjectURL(file);
+    converted.value = false;
   }
 }
 
@@ -28,6 +34,8 @@ async function convertPdfToSearchable() {
       forceFormData: true,
       onSuccess: (response) => {
         downloadUrl.value = response.props.downloadUrl;
+        src.value = downloadUrl.value;
+        converted.value = true
       },
       onError: (errors) => {
         console.error('Conversion failed:', errors);
@@ -37,6 +45,7 @@ async function convertPdfToSearchable() {
     console.error('Conversion failed:', error);
   }
 }
+
 
 const handlePdfLoaded = (data) => {
 };
@@ -62,15 +71,14 @@ const handlePdfError = (error) => {
           Transform your non-searchable PDFs into searchable, ATS-friendly documents with our free tool. Enhance your
           document's accessibility and usability.
         </p>
-        <div class="flex justify-between items-center">
-          <form @submit.prevent="convertPdfToSearchable" class="bg-white shadow-md rounded-lg p-8 mb-4 w-1/2">
-            <h2 class="text-2xl font-bold mb-6 text-center">Upload Your PDF</h2>
+        <div class="bg-white shadow-md rounded-lg p-8 mb-4 flex justify-center">
+          <form @submit.prevent="convertPdfToSearchable" v-if="!downloadUrl" class="w-1/2">
+            <h2 class="text-2xl font-bold mb-6 text-center">Convert to Searchable PDF online </h2>
             <div class="mb-6">
               <label class="block text-lg font-medium text-gray-700 mb-2" for="pdf-upload">Choose a PDF File</label>
               <input id="pdf-upload"
-                class="p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition duration-200 hover:border-blue-400"
+                class="p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/2 transition duration-200 hover:border-blue-400"
                 type="file" @input="handleFileInput" accept="application/pdf" />
-              <p v-if="selectedFileName" class="mt-2 text-sm text-gray-600">Selected file: {{ selectedFileName }}</p>
             </div>
             <button
               class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition duration-200"
@@ -78,21 +86,14 @@ const handlePdfError = (error) => {
               Convert to Searchable PDF
             </button>
           </form>
-          <div class="w-1/2 flex items-center justify-center">
-            <div v-if="src" class="">
-              <PdfViewer :src="src" :lazyLoading="true"  @loaded="handlePdfLoaded"
-                @error="handlePdfError" />
-            </div>
-            <div v-else class="bg-white shadow-md rounded-lg p-8 mb-4 w-3/4">
-              <span class="text-sm">
-                The uploaded and converted PDF will be displayed here for your convenience.
-              </span>
-            </div>
+          <div v-if="downloadUrl" class="w-full">
+            <a :href="downloadUrl"
+              class="text-white hover:bg-violet-500 border border-gray-400 rounded-lg  p-4 font-bold bg-teal-500 "
+              download>Download Your Searchable PDF</a>
           </div>
         </div>
-
-        <div v-if="downloadUrl" class="mt-10">
-          <a :href="downloadUrl" class="text-blue-600 hover:underline" download>Download Converted PDF</a>
+        <div v-if="src && !downloadUrl" class="w-1/4">
+          <PdfViewer :src="src" :lazyLoading="true" @loaded="handlePdfLoaded" @error="handlePdfError" />
         </div>
 
         <section class="mt-10">

@@ -24,6 +24,7 @@ Route::get('/pdf-to-scanable-pdf', function () {
 
 Route::post('/convert-pdf-to-doc', [DocumentOcrController::class, 'convertPdfToDoc']);
 Route::post('/convert-pdf-to-searchable', [DocumentOcrController::class, 'convertPdfToSearchable'])->name('pdfscanable');
+Route::delete('/delete-file',[DocumentOcrController::class,'removeFile'])->name('pdf_delete');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

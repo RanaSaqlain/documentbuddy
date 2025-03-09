@@ -87,7 +87,7 @@ class DocumentOcrController extends Controller
         $downloadUrl = Storage::url('output/' . basename($searchablePdfPath));
     
         // Return the URL for the downloadable file
-        return Inertia::render('Pdf2Doc', [
+        return Inertia::render('Services/Pdf2Pdf', [
             'downloadUrl' => $downloadUrl,
         ]);
     }
@@ -122,5 +122,12 @@ class DocumentOcrController extends Controller
         }
 
         return $docxPath;
+    }
+    function removeFile(Request $request)
+    {
+        if($request->url)
+        {
+            Storage::delete($request->url);
+        }
     }
 }
