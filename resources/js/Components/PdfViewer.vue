@@ -122,8 +122,11 @@ onMounted(() => {
 .pdf-container {
     position: relative;
     min-height: 200px;
+    user-select: text; 
 }
-
+.pdf-container * {
+  user-select: text;
+}
 .pdf-loader {
     position: absolute;
     top: 50%;
