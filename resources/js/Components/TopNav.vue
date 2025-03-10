@@ -13,18 +13,17 @@ const toggleMenu = () => {
                 <!-- Logo -->
                 <div class="text-3xl font-bold flex items-center space-x-1">
                     <span class="text-red-500 text-4xl -mt-1">D</span>
-                    <span class="text-orange-500 text-2xl">o</span>
-                    <span class="text-yellow-500 text-3xl -mb-1">c</span>
-                    <span class="text-green-500 text-4xl">u</span>
-                    <span class="text-blue-500 text-2xl -mt-1">m</span>
-                    <span class="text-indigo-500 text-3xl">e</span>
-                    <span class="text-violet-500 text-4xl -mb-1">n</span>
-                    <span class="text-red-500 text-3xl">t</span>
-                    <span class="text-teal-500 text-4xl uppercase">B</span>
-                    <span class="text-green-500 text-2xl lowercase -mt-1">u</span>
-                    <span class="text-blue-500 text-3xl uppercase">D</span>
-                    <span class="text-indigo-500 text-2xl lowercase -mb-1">d</span>
-                    <span class="text-violet-500 text-3xl uppercase">Y</span>
+                    <span class="text-orange-500 text-2xl">i</span>
+                    <span class="text-yellow-500 text-3xl -mb-1">g</span>
+                    <span class="text-green-500 text-4xl">i</span>
+                    <span class="text-blue-500 text-2xl -mt-1">t</span>
+                    <span class="text-indigo-500 text-3xl">i</span>
+                    <span class="text-violet-500 text-4xl -mb-1">z</span>
+                    <span class="text-red-500 text-3xl">e</span>
+                    <span class="text-teal-500 text-4xl uppercase">M</span>
+                    <span class="text-green-500 text-2xl lowercase -mt-1">a</span>
+                    <span class="text-blue-500 text-3xl uppercase">t</span>
+                    <span class="text-indigo-500 text-2xl lowercase -mb-1">e</span>
                 </div>
                 <!-- Desktop Menu -->
                 <ul class="hidden md:flex space-x-6">

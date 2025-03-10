@@ -5,7 +5,7 @@
 		<div class="dark:bg-teal-600">
 			<div class="container flex flex-col items-center px-4 py-16 pb-24 mx-auto text-center lg:pb-56 md:py-32 md:px-10 lg:px-32 dark:text-gray-50">
 				<h1 class="text-5xl font-bold leading-none sm:text-6xl xl:max-w-3xl dark:text-gray-50">Online Document Editor Tool.</h1>
-				<p class="mt-6 mb-8 text-lg sm:mb-12 xl:max-w-3xl dark:text-gray-50">Document Buddy is an online document editor tool. Here you can perform a variety of functions upon your document i-e PDF to DOC, PDF to ATS PDF and many more. </p>
+				<p class="mt-6 mb-8 text-lg sm:mb-12 xl:max-w-3xl dark:text-gray-50">Digitize Mate is an online document editor tool. Here you can perform a variety of functions upon your document i-e PDF to DOC, PDF to ATS PDF and many more. </p>
 				<div class="flex flex-wrap justify-center">
 					<button type="button" class="px-8 py-3 m-2 text-lg font-semibold rounded dark:bg-gray-100 dark:text-gray-900">PDF editor and converter</button>
 					<button type="button" class="px-8 py-3 m-2 text-lg border rounded dark:border-gray-300 dark:text-gray-50">About Us</button>

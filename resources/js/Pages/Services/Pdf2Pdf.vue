@@ -59,16 +59,16 @@ const handlePdfError = (error) => {
 <template>
   <GuestLayout>
 
-    <Head title="Convert Non-Searchable PDF to Searchable PDF - Document Buddy">
+    <Head title="Convert Non-Searchable PDF to Searchable PDF - Digitize Mate">
       <meta name="keywords"
         content="Pdf to ATS Pdf, pdf to scanable pdf, PDF to DOCX, PDF converter, document conversion, online PDF tool, free PDF converter">
 
     </Head>
     <div class="bg-gray-100 min-h-screen flex flex-col">
       <main class="flex-grow container mx-auto py-10 text-center">
-        <h2 class="text-3xl font-bold mb-4">Convert Non-Searchable PDF to Searchable PDF</h2>
+        <h2 class="text-3xl font-bold mb-4">Convert non-selectable PDF into selectable and searchable PDF</h2>
         <p class="text-lg text-gray-600 mb-8">
-          Transform your non-searchable PDFs into searchable, ATS-friendly documents with our free tool. Enhance your
+          Transform your non-selectable, non-searchable PDFs into searchable, ATS-friendly PDFs with our free tool. Enhance your
           document's accessibility and usability.
         </p>
         <div class="bg-white shadow-md rounded-lg p-8 mb-4 flex justify-center">
@@ -125,6 +125,11 @@ const handlePdfError = (error) => {
             <p>A searchable PDF is a PDF document that has been processed with OCR to allow text search and selection.
             </p>
           </div>
+        </section>
+
+        <section class="mt-10">
+          <h3 class="text-2xl font-bold mb-4">Keywords</h3>
+          <p>Non-Searchable PDF to Searchable PDF, Non-Selectable PDF to Selectable PDF, Convert into ATS scanable resume</p>
         </section>
       </main>
     </div>
