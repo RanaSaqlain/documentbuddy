@@ -27,10 +27,9 @@ const toggleMenu = () => {
                 </div>
                 <!-- Desktop Menu -->
                 <ul class="hidden md:flex space-x-6">
-                    <li><Link class="hover:text-violet-800 hover:font-extrabold text-gray-800" href="/" prefetch="mount">Home</Link></li>
-                    <li><Link class="hover:text-violet-800 hover:font-extrabold text-gray-800" href="about" prefetch="mount">About</Link></li>
-                    <li><Link class="hover:text-violet-800 hover:font-extrabold text-gray-800" :href="route('services')" prefetch="mount">Services</Link></li>
-                    <li><a href="#" class="hover:text-violet-800 hover:font-extrabold text-gray-800">Contact</a></li>
+                    <li><Link class="hover:text-violet-800 font-semibold hover:font-extrabold hover:underline text-gray-800" href="/" prefetch="mount">Home</Link></li>
+                    <li><Link class="hover:text-violet-800 font-semibold hover:font-extrabold hover:underline text-gray-800" :href="route('services')" prefetch="mount">Tools</Link></li>                    
+                    <li><Link class="hover:text-violet-800 font-semibold hover:font-extrabold hover:underline text-gray-800" href="about" prefetch="mount">About</Link></li>
                 </ul>
 
                 <!-- Mobile Menu Toggle -->
