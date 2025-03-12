@@ -2,8 +2,8 @@
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { ref } from "vue";
 import { useForm, Head, Link, router } from "@inertiajs/vue3";
-import { appName } from '@/constants.js';
-
+import { appName } from "@/constants.js";
+import Keywords from "@/Components/Keywords.vue"; // Importing Keywords component
 
 const form = useForm({
   file: null,
@@ -64,10 +64,11 @@ const handlePdfError = (error) => {
     </Head>
     <div class="bg-gray-100 min-h-screen flex flex-col">
       <main class="flex-grow container mx-auto py-10 text-center">
-        <h2 class="text-3xl font-bold mb-4">
+        <h1>{{ appName }}</h1>
+        <h2 class="text-2xl font-bold mb-4">
           Convert non-selectable PDF into selectable and searchable PDF
         </h2>
-        <p class="text-lg text-gray-600 mb-8">
+        <p class="text-medium text-wrap text-gray-600 mb-8">
           Transform your non-selectable, non-searchable PDFs into searchable, ATS-friendly
           PDFs with our free tool. Enhance your document's accessibility and usability.
         </p>
@@ -78,12 +79,9 @@ const handlePdfError = (error) => {
             class="w-1/2"
           >
             <h2 class="text-2xl font-bold mb-6 text-center">
-              Convert to Searchable PDF online
+              Chose your file or drop at browser
             </h2>
             <div class="mb-6">
-              <label class="block text-lg font-medium text-gray-700 mb-2" for="pdf-upload"
-                >Choose a PDF File</label
-              >
               <input
                 id="pdf-upload"
                 class="p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/2 transition duration-200 hover:border-blue-400"
@@ -152,11 +150,13 @@ const handlePdfError = (error) => {
         </section>
 
         <section class="mt-10">
-          <h3 class="text-2xl font-bold mb-4">Keywords</h3>
-          <p>
-            Non-Searchable PDF to Searchable PDF, Non-Selectable PDF to Selectable PDF,
-            Convert into ATS scanable resume
-          </p>
+          <Keywords
+            :pageKeywords="[
+              'Non-Searchable PDF to Searchable PDF',
+              'Non-Selectable PDF to Selectable PDF',
+              'Convert into ATS scanable resume',
+            ]"
+          />
         </section>
       </main>
     </div>
