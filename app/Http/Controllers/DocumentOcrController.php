@@ -26,16 +26,30 @@ class DocumentOcrController extends Controller
         $outputDir = storage_path('app/public/output/');
     
         // Ensure directories exist
-        if (!file_exists($inputDir)) {
-            mkdir($inputDir, 0755, true);
-        }
-        if (!file_exists($outputDir)) {
-            mkdir($outputDir, 0755, true);
+        try {
+            if (!file_exists($inputDir)) {
+                mkdir($inputDir, 0755, true);
+            }
+            if (!file_exists($outputDir)) {
+                mkdir($outputDir, 0755, true);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to create directories: ' . $e->getMessage(),
+            ], 500);
         }
     
         // Store the uploaded file temporarily
         $pdfPath = $inputDir . '/' . uniqid() . '.pdf';
-        $request->file('file')->move($inputDir, basename($pdfPath));
+        try {
+            $request->file('file')->move($inputDir, basename($pdfPath));
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to move uploaded file: ' . $e->getMessage(),
+            ], 500);
+        }
     
         // Path for the output file - use unique ID for processing but keep original name for download
         $searchablePdfPath = $outputDir . '/' . uniqid() . '.pdf';
@@ -65,7 +79,9 @@ class DocumentOcrController extends Controller
         $ocrProcess->run();
     
         // Clean up input file
-        unlink($pdfPath);
+        if (file_exists($pdfPath)) {
+            unlink($pdfPath);
+        }
     
         if (!$ocrProcess->isSuccessful()) {
             return response()->json([

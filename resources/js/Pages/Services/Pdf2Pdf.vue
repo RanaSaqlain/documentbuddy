@@ -12,6 +12,7 @@ const form = useForm({
 const removeFile = useForm({
   url: null,
 });
+const isLoading = ref(false);
 
 const src = ref("");
 const converted = ref();
@@ -28,18 +29,20 @@ function handleFileInput(event) {
     converted.value = false;
   }
 }
-
 async function convertPdfToSearchable() {
   try {
+    isLoading.value = true;
     await form.post("/convert-pdf-to-searchable", {
       forceFormData: true,
       onSuccess: (response) => {
         downloadUrl.value = response.props.downloadUrl;
         src.value = downloadUrl.value;
         converted.value = true;
+        isLoading.value = false;
       },
       onError: (errors) => {
         console.error("Conversion failed:", errors);
+        isLoading.value = false;
       },
     });
   } catch (error) {
@@ -47,7 +50,7 @@ async function convertPdfToSearchable() {
   }
 }
 
-const handlePdfLoaded = (data) => {};
+const handlePdfLoaded = (data) => { };
 
 const handlePdfError = (error) => {
   console.error("PDF loading error:", error);
@@ -56,11 +59,10 @@ const handlePdfError = (error) => {
 
 <template>
   <GuestLayout>
+
     <Head title="Convert Non-Searchable PDF to Searchable PDF - {{ appName }}">
-      <meta
-        name="keywords"
-        content="Pdf to ATS Pdf, pdf to scanable pdf, PDF to DOCX, PDF converter, document conversion, online PDF tool, free PDF converter"
-      />
+      <meta name="keywords"
+        content="Pdf to ATS Pdf, pdf to scanable pdf, PDF to DOCX, PDF converter, document conversion, online PDF tool, free PDF converter" />
     </Head>
     <div class="bg-gray-100 min-h-screen flex flex-col">
       <main class="flex-grow container mx-auto py-10 text-center">
@@ -73,47 +75,49 @@ const handlePdfError = (error) => {
           PDFs with our free tool. Enhance your document's accessibility and usability.
         </p>
         <div class="bg-white shadow-md rounded-lg p-8 mb-4 flex justify-center">
-          <form
-            @submit.prevent="convertPdfToSearchable"
-            v-if="!downloadUrl"
-            class="w-1/2"
-          >
+          <form @submit.prevent="convertPdfToSearchable" v-if="!downloadUrl" class="w-1/2">
             <h2 class="text-2xl font-bold mb-6 text-center">
               Chose your file or drop at browser
             </h2>
             <div class="mb-6">
-              <input
-                id="pdf-upload"
+              <input id="pdf-upload"
                 class="p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/2 transition duration-200 hover:border-blue-400"
-                type="file"
-                @input="handleFileInput"
-                accept="application/pdf"
-              />
+                type="file" @input="handleFileInput" accept="application/pdf" />
             </div>
             <button
               class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-              type="submit"
-            >
-              Convert to Searchable PDF
+              type="submit" :disabled="isLoading">
+              <span v-if="isLoading">
+                <svg class="animate-spin h-5 w-5 mr-3 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v2a6 6 0 100 12v2a8 8 0 01-8-8z">
+                  </path>
+                </svg>
+                Converting...
+              </span>
+              <span v-else>Convert to Searchable PDF</span>
             </button>
           </form>
           <div v-if="downloadUrl" class="w-full">
-            <a
-              :href="downloadUrl"
+            <a :href="downloadUrl"
               class="text-white hover:bg-violet-500 border border-gray-400 rounded-lg p-4 font-bold bg-teal-500"
-              download
-              >Download Your Searchable PDF</a
-            >
+              download>
+              <svg class="inline-block w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  d="M12 0C10.9 0 10 .9 10 2v10H7l5 5 5-5h-3V2c0-1.1-.9-2-2-2zm0 24c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z" />
+              </svg>
+              Download Your Searchable PDF
+            </a>
+            <span class="w-1/2 p-4"> OR </span>
+            <Link :href="route('Pdf2Pdf')" prefecth cache-for="3m" class="bg-red-500 p-4 ml-2 rounded-lg text-white ">
+            Reset or Upload an other file</Link>
           </div>
         </div>
         <div class="flex justify-center">
           <div v-if="src && !downloadUrl" class="w-1/2">
-            <PdfViewer
-              :src="src"
-              :lazyLoading="true"
-              @loaded="handlePdfLoaded"
-              @error="handlePdfError"
-            />
+            <PdfViewer :src="src" :lazyLoading="true" @loaded="handlePdfLoaded" @error="handlePdfError" />
           </div>
         </div>
 
@@ -150,13 +154,11 @@ const handlePdfError = (error) => {
         </section>
 
         <section class="mt-10">
-          <Keywords
-            :pageKeywords="[
-              'Non-Searchable PDF to Searchable PDF',
-              'Non-Selectable PDF to Selectable PDF',
-              'Convert into ATS scanable resume',
-            ]"
-          />
+          <Keywords :pageKeywords="[
+            'Non-Searchable PDF to Searchable PDF',
+            'Non-Selectable PDF to Selectable PDF',
+            'Convert into ATS scanable resume',
+          ]" />
         </section>
       </main>
     </div>
