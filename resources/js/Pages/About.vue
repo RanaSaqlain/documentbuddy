@@ -1,6 +1,8 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import Contact from '@/Components/Contact.vue';
+import { appName } from '@/constants.js';
+
 </script>
 <template>
     <GuestLayout>
@@ -11,7 +13,7 @@ import Contact from '@/Components/Contact.vue';
                             <div
                                 class="text-center sm:text-left mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:mx-auto sm:before:mx-0 before:dark:bg-violet-600">
                                 <h1 class="text-3xl font-semibold">About Us</h1>
-                                <p class="text-sm font-bold tracking-wider uppercase dark:text-gray-600">At Digitize Mate we do</p>
+                                <p class="text-sm font-bold tracking-wider uppercase dark:text-gray-600">At {{ appName }} we do</p>
                             </div>
                         </div>
                         <div class="relative col-span-12 px-4 space-y-6 sm:col-span-9">

@@ -1,3 +1,6 @@
+<script setup>
+import { appName } from '@/constants.js';
+</script>
 <template>
 	<footer class="px-4 divide-y dark:bg-gray-100 dark:text-gray-800">
 		<div class="container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
@@ -8,15 +11,15 @@
 							<path d="M18.266 26.068l7.839-7.854 4.469 4.479c1.859 1.859 1.859 4.875 0 6.734l-1.104 1.104c-1.859 1.865-4.875 1.865-6.734 0zM30.563 2.531l-1.109-1.104c-1.859-1.859-4.875-1.859-6.734 0l-6.719 6.734-6.734-6.734c-1.859-1.859-4.875-1.859-6.734 0l-1.104 1.104c-1.859 1.859-1.859 4.875 0 6.734l6.734 6.734-6.734 6.734c-1.859 1.859-1.859 4.875 0 6.734l1.104 1.104c1.859 1.859 4.875 1.859 6.734 0l21.307-21.307c1.859-1.859 1.859-4.875 0-6.734z"></path>
 						</svg>
 					</div>
-					<span class="self-center text-2xl font-semibold">Digitize Mate</span>
+					<span class="self-center text-2xl font-semibold">{{ appName }}</span>
 				</a>
 			</div>
-			<div class="grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4">
+			<div class="grid grid-cols-1 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-3">
 				<div class="space-y-3">
 					<h3 class="tracking-wide uppercase dark:text-gray-900">Product</h3>
 					<ul class="space-y-1">
 						<li>
-							<a rel="noopener noreferrer" href="#">Features</a>
+							<a rel="noopener noreferrer" href="#">Tools</a>
 						</li>
 						<li>
 							<a rel="noopener noreferrer" href="#">Integrations</a>
@@ -30,7 +33,7 @@
 					</ul>
 				</div>
 				<div class="space-y-3">
-					<h3 class="tracking-wide uppercase dark:text-gray-900">Company</h3>
+					<h3 class="tracking-wide uppercase dark:text-gray-900">{{ appName }}</h3>
 					<ul class="space-y-1">
 						<li>
 							<a rel="noopener noreferrer" href="#">Privacy</a>
@@ -40,20 +43,7 @@
 						</li>
 					</ul>
 				</div>
-				<div class="space-y-3">
-					<h3 class="uppercase dark:text-gray-900">Developers</h3>
-					<ul class="space-y-1">
-						<li>
-							<a rel="noopener noreferrer" href="#">Public API</a>
-						</li>
-						<li>
-							<a rel="noopener noreferrer" href="#">Documentation</a>
-						</li>
-						<li>
-							<a rel="noopener noreferrer" href="#">Guides</a>
-						</li>
-					</ul>
-				</div>
+				
 				<div class="space-y-3">
 					<div class="uppercase dark:text-gray-900">Social media</div>
 					<div class="flex justify-start space-x-3">
@@ -76,6 +66,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="py-6 text-sm text-center dark:text-gray-600">© 2025 DocumentBuddy. All rights reserved.</div>
+		<div class="py-6 text-sm text-center dark:text-gray-600">© 2025 {{ appName }}. All rights reserved.</div>
 	</footer>
 </template>

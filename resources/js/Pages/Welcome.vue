@@ -1,5 +1,7 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
+import { appName } from '@/constants.js';
+
 
 defineProps({
   canLogin: {
@@ -27,13 +29,13 @@ function handleImageError() {
 </script>
 
 <template>
-  <Head title="Welcome to Digitize Mate" />
+  <Head title="Welcome to {{ appName }}" />
   <div class="bg-gray-100">
     <div class="relative flex min-h-screen flex-col items-center justify-center">
       <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
         <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
           <div class="flex lg:col-start-2 lg:justify-center">
-            <span class="text-3xl font-bold text-blue-600">Digitize Mate</span>
+            <span class="text-3xl font-bold text-blue-600">{{ appName }}</span>
           </div>
           <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end text-black">
             <Link
@@ -63,11 +65,11 @@ function handleImageError() {
           </nav>
         </header>
         <main class="text-center">
-          <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to Digitize Mate</h1>
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to {{ appName }}</h1>
           <p class="text-lg text-gray-600 mb-8">
-            Digitize Mate is a website tool that offers a multitude of features for managing documents all in one place. The best part? It's completely free!
+            {{ appName }} is a website tool that offers a multitude of features for managing documents all in one place. The best part? It's completely free!
           </p>
-          <img src="/images/document-buddy.png" alt="Digitize Mate" class="mx-auto mb-8" onerror="handleImageError()" />
+          <img src="/images/document-buddy.png" alt="{{ appName }}" class="mx-auto mb-8" onerror="handleImageError()" />
           <div class="flex justify-center space-x-4">
             <!-- <Link
               :href="route('features')"
@@ -84,7 +86,7 @@ function handleImageError() {
           </div>
         </main>
         <footer class="mt-10 text-center text-gray-500">
-          <p>&copy; 2025 Digitize Mate. All rights reserved.</p>
+          <p>&copy; 2025 {{ appName }}. All rights reserved.</p>
         </footer>
       </div>
     </div>

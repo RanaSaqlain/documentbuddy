@@ -2,6 +2,8 @@
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { ref } from "vue";
 import { useForm, Head, Link, router } from "@inertiajs/vue3";
+import { appName } from '@/constants.js';
+
 
 const form = useForm({
   file: null,
@@ -54,7 +56,7 @@ const handlePdfError = (error) => {
 
 <template>
   <GuestLayout>
-    <Head title="Convert Non-Searchable PDF to Searchable PDF - Digitize Mate">
+    <Head title="Convert Non-Searchable PDF to Searchable PDF - {{ appName }}">
       <meta
         name="keywords"
         content="Pdf to ATS Pdf, pdf to scanable pdf, PDF to DOCX, PDF converter, document conversion, online PDF tool, free PDF converter"
