@@ -7,8 +7,9 @@ import { appName } from '@/constants.js';
 </script>
 
 <template>
+    <AppLoader />
 
-    <Head>
+    <Head>  
         <meta name="description"
         content="{{ appName }} is your go-to tool for converting PDF files to DOCX format. Fast, secure, and easy to use. Try it now for free!">
         <meta name="author" content="{{ appName }}">

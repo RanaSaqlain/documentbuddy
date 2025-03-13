@@ -65,7 +65,7 @@ const handlePdfError = (error) => {
         content="Pdf to ATS Pdf, pdf to scanable pdf, PDF to DOCX, PDF converter, document conversion, online PDF tool, free PDF converter" />
     </Head>
     <div class="bg-gray-100 min-h-screen flex flex-col">
-      <main class="flex-grow container mx-auto py-10 text-center">
+      <main class="flex-grow container mx-auto py-10">
         <h1>{{ appName }}</h1>
         <h2 class="text-2xl font-bold mb-4">
           Convert non-selectable PDF into selectable and searchable PDF
@@ -123,7 +123,7 @@ const handlePdfError = (error) => {
 
         <section class="mt-10">
           <h3 class="text-2xl font-bold mb-4">Features</h3>
-          <ul class="list-disc list-inside text-left mx-auto max-w-lg">
+          <ul class="list-disc list-inside  max-w-lg">
             <li>Convert non-searchable PDFs to searchable PDFs</li>
             <li>Enhance document accessibility</li>
             <li>Completely free to use</li>
@@ -132,7 +132,7 @@ const handlePdfError = (error) => {
 
         <section class="mt-10">
           <h3 class="text-2xl font-bold mb-4">How It Works</h3>
-          <p class="text-left mx-auto max-w-lg">
+          <p class=" max-w-lg">
             Upload your non-searchable PDF file using the form above. Our tool will
             process the file and convert it to a searchable PDF format, which you can then
             download. The process is simple and quick, ensuring you get your converted
@@ -142,7 +142,7 @@ const handlePdfError = (error) => {
 
         <section class="mt-10">
           <h3 class="text-2xl font-bold mb-4">FAQs</h3>
-          <div class="text-left mx-auto max-w-lg">
+          <div class=" max-w-lg">
             <h4 class="font-semibold">Is the conversion free?</h4>
             <p>Yes, our PDF to searchable PDF converter is completely free to use.</p>
             <h4 class="font-semibold mt-4">What is a searchable PDF?</h4>

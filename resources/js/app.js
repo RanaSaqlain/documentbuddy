@@ -3,9 +3,10 @@ import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { createApp, h } from 'vue';
+import { createApp, h, ref } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import PdfViewer from './Components/PdfViewer.vue';
+import Loader from './Components/Loader.vue';
 import { appName } from '@/constants.js';
 
 createInertiaApp({
@@ -16,13 +17,38 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.vue'),
         ),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
-            .use(plugin)
+        const isLoading = ref(false);
+
+        const app = createApp({
+            render: () => h(App, props)
+        });
+
+        app.use(plugin)
             .use(ZiggyVue)
             .component('PdfViewer', PdfViewer)
+            .component('Loader', Loader)
             .mount(el);
+
+        app.mixin({
+            created() {
+                this.$inertia.on('start', () => {
+                    isLoading.value = true;
+                });
+                this.$inertia.on('finish', () => {
+                    isLoading.value = false;
+                });
+            }
+        });
+
+        app.component('AppLoader', {
+            setup() {
+                return () => isLoading.value ? h(Loader) : null;
+            }
+        });
+
+        return app;
     },
     progress: {
-        color: '#k',
+        color: '#0f0101',
     },
 });
