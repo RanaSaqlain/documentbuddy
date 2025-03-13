@@ -18,9 +18,15 @@ Route::get('/', function () {
 Route::inertia('about','About');
 Route::inertia('services','Services/Index')->name('services');
 
-Route::get('/pdf-to-scanable-pdf', function () {
-    return Inertia::render('Services/Pdf2Pdf');
-})->name('Pdf2Pdf');
+Route::group([], function () {
+    Route::get('/pdf-to-scanable-pdf', function () {
+        return Inertia::render('Services/Pdf2Pdf');
+    })->name('Pdf2Pdf');
+
+    Route::get('/image-to-text', function () {
+        return Inertia::render('Services/ImageToText');
+    })->name('ImageToText');
+});
 
 Route::post('/convert-pdf-to-doc', [DocumentOcrController::class, 'convertPdfToDoc']);
 Route::post('/convert-pdf-to-searchable', [DocumentOcrController::class, 'convertPdfToSearchable'])->name('pdfscanable');
