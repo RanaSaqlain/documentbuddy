@@ -26,6 +26,10 @@ Route::group([], function () {
     Route::get('/image-to-text', function () {
         return Inertia::render('Services/ImageToText');
     })->name('ImageToText');
+  
+    Route::get('pdf-to-doc', function () {
+        return Inertia::render('Services/PdfToDoc');
+    })->name('PdfToDoc');
 });
 
 Route::controller(DocumentOcrController::class)->group(function () {
