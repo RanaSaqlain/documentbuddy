@@ -111,19 +111,19 @@ class DocumentOcrController extends Controller
 
     public function uploadAndConvertToText(Request $request)
     {
+
         // Validate the uploaded file
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Store the uploaded image
-        $imagePath = $request->file('image')->store('uploads', 'public');
-
+        // Store the uploaded image in the temp folder
+        $imagePath = $request->file('file')->store('temp', 'public');
         // Get the full path to the stored image
         $fullImagePath = storage_path('app/public/' . $imagePath);
 
-        // Define the output text file path
-        $outputTextPath = storage_path('app/public/text_outputs/' . pathinfo($imagePath, PATHINFO_FILENAME) . '.txt');
+        // Define the output text file path in the output folder
+        $outputTextPath = storage_path('app/public/output/' . pathinfo($imagePath, PATHINFO_FILENAME) . '.txt');
 
         // Ensure the output directory exists
         if (!file_exists(dirname($outputTextPath))) {
@@ -131,7 +131,8 @@ class DocumentOcrController extends Controller
         }
 
         // Run Tesseract OCR command
-        $process = new Process(['tesseract', $fullImagePath, $outputTextPath]);
+        $tesseractPath = env('TESSERACT_PATH'); 
+        $process = new Process([$tesseractPath, $fullImagePath, $outputTextPath]);
         $process->run();
 
         // Check if the process was successful
@@ -142,15 +143,19 @@ class DocumentOcrController extends Controller
         // Read the generated text file
         $textContent = file_get_contents($outputTextPath . '.txt');
 
-        // Optionally, save the text content to the database or return it
-        // Example: Save to database
-        // YourModel::create(['text_content' => $textContent]);
+        // Clean up the input file
+        if (file_exists($fullImagePath)) {
+            unlink($fullImagePath);
+        }
 
-        // Return the text content as a response
-        return response()->json([
+        // Clean up the output text file
+        if (file_exists($outputTextPath . '.txt')) {
+            unlink($outputTextPath . '.txt');
+        }
+        // Return the text content as a response using Inertia
+        return Inertia::render('Services/ImageToText', [
             'success' => true,
             'text' => $textContent,
-            'text_file_url' => Storage::url('text_outputs/' . basename($outputTextPath) . '.txt'),
         ]);
     }
 

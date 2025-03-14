@@ -14,7 +14,7 @@ const pageKeywords = ['Tools', 'Pdf to selectable, searchable and ATS readable P
                     <h1 class="text-5xl font-bold leading-none sm:text-6xl">Tools
                         <span class="dark:text-violet-600">Features</span>
                     </h1>
-                    <p class="mt-4 text-lg">Explore our powerful tools for PDF management.</p>
+                    <p class="mt-4 text-lg">Use our powerful tools for PDF management.</p>
                 </div>
             </div>
         </section>

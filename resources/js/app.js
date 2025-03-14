@@ -27,6 +27,11 @@ createInertiaApp({
             .use(ZiggyVue)
             .component('PdfViewer', PdfViewer)
             .component('Loader', Loader)
+            .component('AppLoader', {
+                setup() {
+                    return () => isLoading.value ? h(Loader) : null;
+                }
+            })
             .mount(el);
 
         app.mixin({
@@ -37,12 +42,6 @@ createInertiaApp({
                 this.$inertia.on('finish', () => {
                     isLoading.value = false;
                 });
-            }
-        });
-
-        app.component('AppLoader', {
-            setup() {
-                return () => isLoading.value ? h(Loader) : null;
             }
         });
 

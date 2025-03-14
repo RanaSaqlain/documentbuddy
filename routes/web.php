@@ -28,9 +28,12 @@ Route::group([], function () {
     })->name('ImageToText');
 });
 
-Route::post('/convert-pdf-to-doc', [DocumentOcrController::class, 'convertPdfToDoc']);
-Route::post('/convert-pdf-to-searchable', [DocumentOcrController::class, 'convertPdfToSearchable'])->name('pdfscanable');
-Route::delete('/delete-file',[DocumentOcrController::class,'removeFile'])->name('pdf_delete');
+Route::controller(DocumentOcrController::class)->group(function () {
+    Route::post('/convert-pdf-to-doc', 'convertPdfToDoc');
+    Route::post('/convert-pdf-to-searchable', 'convertPdfToSearchable')->name('pdfscanable');
+    Route::delete('/delete-file', 'removeFile')->name('pdf_delete');
+    Route::post('/convert-image-to-text','uploadAndConvertToText')->name('convertionText');
+});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
