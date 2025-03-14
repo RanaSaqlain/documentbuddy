@@ -155,7 +155,7 @@ class DocumentOcrController extends Controller
         // Return the text content as a response using Inertia
         return Inertia::render('Services/ImageToText', [
             'success' => true,
-            'text' => $textContent,
+            'text' => nl2br($textContent),
         ]);
     }
 
