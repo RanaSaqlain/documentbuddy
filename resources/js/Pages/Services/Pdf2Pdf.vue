@@ -74,8 +74,8 @@ const handlePdfError = (error) => {
           Transform your non-selectable, non-searchable PDFs into searchable, ATS-friendly
           PDFs with our free tool. Enhance your document's accessibility and usability.
         </p>
-        <div class="bg-white shadow-md rounded-lg p-8 mb-4 flex justify-center">
-          <form @submit.prevent="convertPdfToSearchable" v-if="!downloadUrl" class="w-1/2">
+        <div class="bg-white shadow-md rounded-lg p-8 mb-4 mx-auto lg:w-1/2 sm:w-full">
+          <form @submit.prevent="convertPdfToSearchable" v-if="!downloadUrl" class="text-center">
             <h2 class="text-2xl font-bold mb-6 text-center">
               Chose your file or drop at browser
             </h2>

@@ -13,7 +13,7 @@ function getColorClass(index) {
 }
 </script>
 <template>
-    <section class="p-6 border border-t-2 dark:text-gray-800">
+    <section class="p-6 bg-gray-100 dark:text-gray-800">
         <div class="container mx-auto">
             <h3 class="text-center font-bold text-lg">Keywords</h3>
             <div class="flex flex-wrap justify-center">
