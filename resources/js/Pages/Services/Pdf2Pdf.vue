@@ -9,9 +9,6 @@ const form = useForm({
   file: null,
 });
 
-const removeFile = useForm({
-  url: null,
-});
 const isLoading = ref(false);
 
 const src = ref("");
