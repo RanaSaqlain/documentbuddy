@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocumentOcrController;
+use App\Http\Controllers\PdfToDocConverter;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -27,16 +28,19 @@ Route::group([], function () {
         return Inertia::render('Services/ImageToText');
     })->name('ImageToText');
   
-    Route::get('pdf-to-doc', function () {
-        return Inertia::render('Services/PdfToDoc');
-    })->name('PdfToDoc');
 });
 
 Route::controller(DocumentOcrController::class)->group(function () {
-    Route::post('/convert-pdf-to-doc', 'convertPdfToDoc');
     Route::post('/convert-pdf-to-searchable', 'convertPdfToSearchable')->name('pdfscanable');
     Route::delete('/delete-file', 'removeFile')->name('pdf_delete');
     Route::post('/convert-image-to-text','uploadAndConvertToText')->name('convertionText');
+});
+
+Route::controller(PdfToDocConverter::class)->group(function(){
+    Route::post('/convert-pdf-to-doc', 'convertToDoc')->name('convertionDoc');
+    Route::get('/pdf-to-doc', function () {
+        return Inertia::render('Services/PdfToDoc');
+    })->name('PdfToDoc');
 });
 
 Route::get('/dashboard', function () {

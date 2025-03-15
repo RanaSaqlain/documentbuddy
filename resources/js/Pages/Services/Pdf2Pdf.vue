@@ -10,12 +10,11 @@ const form = useForm({
 });
 
 const isLoading = ref(false);
-
 const src = ref("");
-const converted = ref();
-
+const converted = ref(false);
 const selectedFileName = ref("");
 const downloadUrl = ref("");
+const errors = ref([]);
 
 function handleFileInput(event) {
   const file = event.target.files[0];
@@ -24,26 +23,47 @@ function handleFileInput(event) {
     selectedFileName.value = file.name;
     src.value = URL.createObjectURL(file);
     converted.value = false;
+    downloadUrl.value = ""; // Reset download URL
+    errors.value = []; // Reset errors
   }
 }
+
 async function convertPdfToSearchable() {
   try {
+    errors.value = [];
     isLoading.value = true;
-    await form.post("/convert-pdf-to-searchable", {
-      forceFormData: true,
-      onSuccess: (response) => {
-        downloadUrl.value = response.props.downloadUrl;
-        src.value = downloadUrl.value;
-        converted.value = true;
-        isLoading.value = false;
+
+    await form.post(route('pdfscanable'), {
+      preserveScroll: true,
+      onSuccess: (page) => {
+        if (page.props.success) {
+          downloadUrl.value = page.props.downloadUrl;
+          src.value = downloadUrl.value;
+          converted.value = true;
+        } else {
+          errors.value = [page.props.error];
+        }
       },
       onError: (errors) => {
-        console.error("Conversion failed:", errors);
-        isLoading.value = false;
+        if (errors.file) {
+          errors.value = Array.isArray(errors.file) ? errors.file : [errors.file];
+        } else {
+          errors.value = ['An unexpected error occurred'];
+        }
       },
+      onFinish: () => {
+        isLoading.value = false;
+        router.get(route('Pdf2Pdf'), {}, {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true
+          });
+      }
     });
   } catch (error) {
     console.error("Conversion failed:", error);
+    errors.value = ['An unexpected error occurred'];
+    isLoading.value = false;
   }
 }
 
@@ -72,6 +92,11 @@ const handlePdfError = (error) => {
           PDFs with our free tool. Enhance your document's accessibility and usability.
         </p>
         <div class="bg-white shadow-md rounded-lg p-8 mb-4 mx-auto lg:w-1/2 sm:w-full">
+          <div v-if="errors.length" class="text-red-700 border border-red-300 bg-red-50 p-4 rounded-lg mb-4">
+            <ul class="list-disc list-inside">
+              <li v-for="error in errors" :key="error">{{ error }}</li>
+            </ul>
+          </div>
           <form @submit.prevent="convertPdfToSearchable" v-if="!downloadUrl" class="text-center">
             <h2 class="text-2xl font-bold mb-6 text-center">
               Chose your file or drop at browser
@@ -96,9 +121,9 @@ const handlePdfError = (error) => {
               <span v-else>Convert to Searchable PDF</span>
             </button>
           </form>
-          <div v-if="downloadUrl" class="w-full">
+          <div v-if="downloadUrl" class="w-full text-center">
             <a :href="downloadUrl"
-              class="text-white hover:bg-violet-500 border border-gray-400 rounded-lg p-4 font-bold bg-teal-500"
+              class="text-white hover:bg-violet-500 border border-gray-400 rounded-lg p-4 font-bold bg-teal-500 mb-2"
               download>
               <svg class="inline-block w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                 viewBox="0 0 24 24">
@@ -107,9 +132,10 @@ const handlePdfError = (error) => {
               </svg>
               Download Your Searchable PDF
             </a>
-            <span class="w-1/2 p-4"> OR </span>
-            <Link :href="route('Pdf2Pdf')" prefecth cache-for="3m" class="bg-red-500 p-4 ml-2 rounded-lg text-white ">
-            Reset or Upload an other file</Link>
+            <span class="w-1/2 p-2"> OR </span>
+            <Link :href="route('Pdf2Pdf')" prefecth cache-for="3m" class="bg-red-500 p-4 rounded-lg text-white ">
+            Reset or Upload another file
+            </Link>
           </div>
         </div>
         <div class="flex justify-center">

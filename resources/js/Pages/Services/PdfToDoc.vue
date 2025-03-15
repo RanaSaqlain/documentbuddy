@@ -12,10 +12,11 @@ const form = useForm({
 const isLoading = ref(false);
 
 const src = ref("");
-const converted = ref();
+const converted = ref(false);
 
 const selectedFileName = ref("");
 const downloadUrl = ref("");
+const errors = ref([]);
 
 function handleFileInput(event) {
   const file = event.target.files[0];
@@ -24,26 +25,54 @@ function handleFileInput(event) {
     selectedFileName.value = file.name;
     src.value = URL.createObjectURL(file);
     converted.value = false;
+    downloadUrl.value = ""; // Reset download URL
+    errors.value = []; // Reset errors
   }
 }
+
 async function convertPdfToDoc() {
   try {
+    errors.value = [];
     isLoading.value = true;
-    await form.post("/convert-pdf-to-doc", {
-      forceFormData: true,
-      onSuccess: (response) => {
-        downloadUrl.value = response.props.downloadUrl;
-        src.value = downloadUrl.value;
-        converted.value = true;
-        isLoading.value = false;
+
+    await form.post(route('convertionDoc'), {
+      preserveScroll: true,
+      onSuccess: (page) => {
+        if (page.props.success) {
+          downloadUrl.value = page.props.downloadUrl;
+          converted.value = true;
+
+        } else {
+          errors.value = [page.props.error];
+        }
       },
       onError: (errors) => {
-        console.error("Conversion failed:", errors);
-        isLoading.value = false;
+        if (errors.file) {
+          errors.value = Array.isArray(errors.file) ? errors.file : [errors.file];
+        } else {
+          errors.value = ['An unexpected error occurred'];
+        }
+        // Redirect to the PDF-to-DOC page after successful conversion
+        router.get(route('PdfToDoc'), {}, {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true
+          });
       },
+      onFinish: () => {
+        isLoading.value = false;
+        // Redirect to the PDF-to-DOC page after successful conversion
+        router.get(route('PdfToDoc'), {}, {
+          preserveState: true,
+          preserveScroll: true,
+          replace: true
+        });
+      }
     });
   } catch (error) {
     console.error("Conversion failed:", error);
+    errors.value = ['An unexpected error occurred'];
+    isLoading.value = false;
   }
 }
 
@@ -68,9 +97,15 @@ const handlePdfError = (error) => {
           Convert your PDF files into editable DOC documents
         </h2>
         <p class="text-medium text-wrap text-gray-600 mb-8">
-          Transform your PDFs into editable DOC format with our free tool. Enhance your document's usability and accessibility.
+          Transform your PDFs into editable DOC format with our free tool. Enhance your document's usability and
+          accessibility.
         </p>
         <div class="bg-white shadow-md rounded-lg p-8 mb-4 mx-auto lg:w-1/2 sm:w-full">
+          <div v-if="errors.length" class=" text-red-700 border p-4 rounded-lg mb-4">
+            <ul>
+              <li v-for="error in errors" :key="error">{{ error }}</li>
+            </ul>
+          </div>
           <form @submit.prevent="convertPdfToDoc" v-if="!downloadUrl" class="text-center">
             <h2 class="text-2xl font-bold mb-6 text-center">
               Choose your file or drop it in the browser
@@ -129,7 +164,9 @@ const handlePdfError = (error) => {
         <section class="mt-10">
           <h3 class="text-2xl font-bold mb-4">How It Works</h3>
           <p class=" max-w-lg">
-            Upload your PDF file using the form above. Our tool will process the file and convert it to a DOC format, which you can then download. The process is simple and quick, ensuring you get your converted document in no time.
+            Upload your PDF file using the form above. Our tool will process the file and convert it to a DOC format,
+            which you can then download. The process is simple and quick, ensuring you get your converted document in no
+            time.
           </p>
         </section>
 
@@ -140,7 +177,8 @@ const handlePdfError = (error) => {
             <p>Yes, our PDF to DOC converter is completely free to use.</p>
             <h4 class="font-semibold mt-4">What is a DOC file?</h4>
             <p>
-              A DOC file is a document file format used by Microsoft Word and other word processing software, allowing for easy editing and formatting.
+              A DOC file is a document file format used by Microsoft Word and other word processing software, allowing
+              for easy editing and formatting.
             </p>
           </div>
         </section>
