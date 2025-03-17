@@ -1,5 +1,6 @@
 <script setup>
 import GuestLayout from "@/Layouts/GuestLayout.vue";
+import Notifier from "@/Components/Notifier.vue";
 import { ref } from "vue";
 import { useForm, Head, Link, router } from "@inertiajs/vue3";
 import { appName } from "@/constants.js";
@@ -54,10 +55,10 @@ async function convertPdfToDoc() {
         }
         // Redirect to the PDF-to-DOC page after successful conversion
         router.get(route('PdfToDoc'), {}, {
-            preserveState: true,
-            preserveScroll: true,
-            replace: true
-          });
+          preserveState: true,
+          preserveScroll: true,
+          replace: true
+        });
       },
       onFinish: () => {
         isLoading.value = false;
@@ -100,13 +101,28 @@ const handlePdfError = (error) => {
           Transform your PDFs into editable DOC format with our free tool. Enhance your document's usability and
           accessibility.
         </p>
-        <div class="bg-white shadow-md rounded-lg p-8 mb-4 mx-auto lg:w-1/2 sm:w-full">
+        <Notifier />
+
+        <div class="bg-white shadow-md mt-4 rounded-lg p-8 mb-4 mx-auto lg:w-1/2 sm:w-full">
           <div v-if="errors.length" class=" text-red-700 border p-4 rounded-lg mb-4">
             <ul>
               <li v-for="error in errors" :key="error">{{ error }}</li>
             </ul>
           </div>
-          <form @submit.prevent="convertPdfToDoc" v-if="!downloadUrl" class="text-center">
+          <div v-if="downloadUrl" class="w-full mb-10 text-center">
+            <a :href="downloadUrl"
+              class="text-white hover:bg-violet-500 border border-gray-400 rounded-lg p-4 font-bold bg-teal-500"
+              download>
+              <svg class="inline-block w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  d="M12 0C10.9 0 10 .9 10 2v10H7l5 5 5-5h-3V2c0-1.1-.9-2-2-2zm0 24c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z" />
+              </svg>
+              Download Your DOC File
+            </a>
+            <div class="w-full mt-10 font-bold">OR</div>
+          </div>
+          <form @submit.prevent="convertPdfToDoc" class="text-center">
             <h2 class="text-2xl font-bold mb-6 text-center">
               Choose your file or drop it in the browser
             </h2>
@@ -130,28 +146,13 @@ const handlePdfError = (error) => {
               <span v-else>Convert to DOC</span>
             </button>
           </form>
-          <div v-if="downloadUrl" class="w-full">
-            <a :href="downloadUrl"
-              class="text-white hover:bg-violet-500 border border-gray-400 rounded-lg p-4 font-bold bg-teal-500"
-              download>
-              <svg class="inline-block w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                viewBox="0 0 24 24">
-                <path
-                  d="M12 0C10.9 0 10 .9 10 2v10H7l5 5 5-5h-3V2c0-1.1-.9-2-2-2zm0 24c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z" />
-              </svg>
-              Download Your DOC File
-            </a>
-            <span class="w-1/2 p-4"> OR </span>
-            <Link :href="route('Pdf2Pdf')" prefecth cache-for="3m" class="bg-red-500 p-4 ml-2 rounded-lg text-white ">
-            Reset or Upload another file</Link>
-          </div>
+
         </div>
         <div class="flex justify-center">
           <div v-if="src && !downloadUrl" class="w-1/2">
             <PdfViewer :src="src" :lazyLoading="true" @loaded="handlePdfLoaded" @error="handlePdfError" />
           </div>
         </div>
-
         <section class="mt-10">
           <h3 class="text-2xl font-bold mb-4">Features</h3>
           <ul class="list-disc list-inside  max-w-lg">
